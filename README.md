@@ -15,7 +15,7 @@ Unlike previous projects with ready-made datasets, this project required **data 
 ---
 
 ## Dataset
-- Dataset size: ~6,000 samples × 9 features
+- Dataset size: ~3800 samples × 17 features
 - Target: Air quality indicator (regression task)
 
 Due to data generation and aggregation, the dataset exhibits natural variability across runs.
