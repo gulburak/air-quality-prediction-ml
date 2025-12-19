@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Measure</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center center/cover no-repeat fixed;
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .container {
+            display: flex;
+            gap: 40px;
+            max-width: 900px;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .panel {
+            background: rgb(197, 215, 244);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 400px;
+        }
+
+        .input-panel {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .input-panel h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 1.5rem;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 2px solid #d1e1f1;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .field input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-panel {
+            flex: 0 0 50%; 
+            padding: 20px;
+            border-radius: 12px;
+            background: #bedcf2;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;  
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .result-panel h2 {
+            margin-bottom: 30px;
+            color: #444;
+            font-size: 1.5rem;
+        }
+
+        .aqi-display {
+            margin-bottom: 30px;
+        }
+
+        .aqi-status {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .aqi-value {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .aqi-text {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 300px;
+            line-height: 1.5;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="panel input-panel">
+            <h2>Enter Values</h2>
+            <form id="form">
+                <div class="field">
+                    <label>CO (ppm)</label>
+                    <input type="number" id="carbon_monoxide" step="0.1" value="4.2">
+                </div>
+                <div class="field">
+                    <label>NO₂ (ppb)</label>
+                    <input type="number" id="nitrogen_dioxide" step="0.1" value="55.0">
+                </div>
+                <div class="field">
+                    <label>SO₂ (ppb)</label>
+                    <input type="number" id="sulphur_dioxide" step="0.1" value="35.0">
+                </div>
+                <div class="field">
+                    <label>O₃ (ppb)</label>
+                    <input type="number" id="ozone" step="0.1" value="50.0">
+                </div>
+                <div class="field">
+                    <label>Temperature (°C)</label>
+                    <input type="number" id="temperature_2m" step="0.1" value="-2.0">
+                </div>
+                <div class="field">
+                    <label>Humidity (%)</label>
+                    <input type="number" id="relative_humidity_2m" step="0.1" value="75.0">
+                </div>
+                <div class="field">
+                    <label>Wind Speed (m/s)</label>
+                    <input type="number" id="wind_speed_10m" step="0.1" value="1.0">
+                </div>
+                <div class="field">
+                    <label>Pressure (hPa)</label>
+                    <input type="number" id="pressure_msl" step="0.1" value="1015.0">
+                </div>
+                <div class="field">
+                    <label>Hour (0-23)</label>
+                    <input type="number" id="hour" step="1" value="20">
+                </div>
+                <div class="field">
+                    <label>Day of Week (0=Mon…6=Sun)</label>
+                    <input type="number" id="day_of_week" step="1" value="2">
+                </div>
+                <div class="field">
+                    <label>Month (1-12)</label>
+                    <input type="number" id="month" step="1" value="12">
+                </div>
+                <button type="submit">Calculate AQI</button>
+            </form>
+        </div>
+    
+        <div class="panel result-panel">
+            <h2>Result</h2>
+            <div class="aqi-display">
+                <div class="aqi-status" id="status">Good</div>
+                <div class="aqi-value" id="value">0</div>
+                <p style="font-size: 1.2rem; margin-top: 5px; color: #666;">AQI</p>
+            </div>
+            <div class="aqi-text" id="healthText">
+                Recommendation will appear here.
+            </div>
+            <div class="aqi-text" id="anomalyFactor">
+                Anomaly factor will appear here.
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('form').onsubmit = async (e) => {
+        e.preventDefault();
+    
+        const input = {
+            carbon_monoxide: +document.getElementById('carbon_monoxide').value,
+            nitrogen_dioxide: +document.getElementById('nitrogen_dioxide').value,
+            sulphur_dioxide: +document.getElementById('sulphur_dioxide').value,
+            ozone: +document.getElementById('ozone').value,
+            temperature_2m: +document.getElementById('temperature_2m').value,
+            relative_humidity_2m: +document.getElementById('relative_humidity_2m').value,
+            wind_speed_10m: +document.getElementById('wind_speed_10m').value,
+            pressure_msl: +document.getElementById('pressure_msl').value,
+            hour: +document.getElementById('hour').value,
+            day_of_week: +document.getElementById('day_of_week').value,
+            month: +document.getElementById('month').value
+        };
+    
+        console.log("JS input object:", input);
+    
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(input)
+        });
+    
+        const result = await response.json();
+    
+        document.getElementById('value').textContent = result.AQI;
+        document.getElementById('status').textContent = result.AQI_category;
+        document.getElementById('healthText').textContent = result.Recommendation; 
+        document.getElementById('anomalyFactor').textContent = "Anomaly factor: " + result.anomaly_factor;
+
+    };
+    </script>
+
+</body>
+</html>
